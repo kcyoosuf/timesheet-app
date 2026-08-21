@@ -38,11 +38,21 @@ const Sheet: React.FC<SheetProps> = ({
     <div className="fixed inset-0 z-50 overflow-hidden">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity animate-in fade-in duration-200"
+        className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity animate-in fade-in duration-200 cursor-pointer"
         onClick={() => onOpenChange(false)}
+        aria-hidden="true"
       />
       {/* Sheet Container */}
-      <div className="fixed inset-0 z-50 flex">{children}</div>
+      <div
+        className="fixed inset-0 z-50 flex pointer-events-none"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) {
+            onOpenChange(false);
+          }
+        }}
+      >
+        {children}
+      </div>
     </div>
   );
 };
@@ -78,7 +88,7 @@ const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
       <div
         ref={ref}
         className={cn(
-          'fixed z-50 bg-card p-6 shadow-2xl transition ease-in-out text-card-foreground overflow-y-auto',
+          'fixed z-50 bg-card p-6 shadow-2xl transition ease-in-out text-card-foreground overflow-y-auto pointer-events-auto',
           sideStyles[side],
           className
         )}

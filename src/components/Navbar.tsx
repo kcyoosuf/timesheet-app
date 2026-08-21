@@ -10,7 +10,6 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { useWorkLog } from '../context/WorkLogContext';
-import { ThemeToggle } from './common/ThemeToggle';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import {
@@ -118,12 +117,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* Right: Actions, Profile & Export */}
             <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-              {/* Theme Toggle on mobile header */}
-              <div className="md:hidden">
-                <ThemeToggle />
-              </div>
-
-              {/* Warnings indicator button */}
+              {/* Warnings indicator button - hidden on mobile, visible on tablet/desktop */}
               {warningCount > 0 && (
                 <Button
                   variant="destructive"
@@ -131,11 +125,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                   id="btn-header-warnings"
                   onClick={onOpenWarningsModal}
                   title={`${warningCount} warnings found`}
-                  className="h-8 sm:h-9 px-2 sm:px-3 bg-amber-500 hover:bg-amber-600 text-white font-bold gap-1 text-xs"
+                  className="hidden sm:flex h-8 sm:h-9 px-2 sm:px-3 bg-amber-500 hover:bg-amber-600 text-white font-bold gap-1 text-xs"
                 >
                   <AlertTriangle className="w-3.5 h-3.5 text-white shrink-0" />
-                  <span className="hidden sm:inline">{warningCount} Warnings</span>
-                  <span className="sm:hidden">{warningCount}</span>
+                  <span>{warningCount} Warnings</span>
                 </Button>
               )}
 
