@@ -1,0 +1,8 @@
+{
+  "name": "Personal Work-Log & Timesheet",
+  "description": "Local-first personal daily work-log tracker, update parser, and monthly Excel timesheet generator with Supabase Auth and per-user PostgreSQL Row Level Security (RLS).",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
