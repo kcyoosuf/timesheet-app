@@ -285,26 +285,26 @@ export const SettingsView: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-5">
       {/* 1. User Management & Row Level Security (RLS) Card */}
-      <Card className="border-border">
-        <CardHeader className="pb-4 border-b border-border bg-gradient-to-r from-amber-500/5 via-transparent to-emerald-500/5">
+      <Card className="border-border shadow-xs">
+        <CardHeader className="pb-3.5 border-b border-border bg-card">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2.5">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center shadow-xs">
-                <ShieldCheck className="w-5 h-5" />
+              <div className="w-8 h-8 rounded-lg bg-muted/80 text-foreground flex items-center justify-center">
+                <ShieldCheck className="w-4 h-4" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <CardTitle className="text-lg font-bold">
-                    User Management & Row Level Security (RLS)
+                  <CardTitle className="text-sm sm:text-base font-semibold tracking-tight">
+                    User Management & Row Level Security
                   </CardTitle>
-                  <Badge variant={isAuthenticated ? 'emerald' : 'outline'} className="text-[10px]">
-                    {isAuthenticated ? 'Authenticated User' : 'Local Guest'}
+                  <Badge variant={isAuthenticated ? 'secondary' : 'outline'} className="text-[10px]">
+                    {isAuthenticated ? 'Authenticated' : 'Local Guest'}
                   </Badge>
                 </div>
-                <p className="text-xs text-muted-foreground">
-                  PostgreSQL Row Level Security ensures each user can strictly see and edit only their own work logs
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  PostgreSQL Row Level Security ensures each user strictly accesses only their own timesheets
                 </p>
               </div>
             </div>
@@ -315,7 +315,7 @@ export const SettingsView: React.FC = () => {
                   variant="outline"
                   size="sm"
                   onClick={() => signOut()}
-                  className="h-8 text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-950/40 gap-1.5"
+                  className="h-8 text-xs font-medium text-rose-600 dark:text-rose-400 hover:bg-rose-500/10 gap-1.5"
                 >
                   <LogOut className="w-3.5 h-3.5" />
                   <span>Sign Out</span>
@@ -326,16 +326,16 @@ export const SettingsView: React.FC = () => {
                     variant="outline"
                     size="sm"
                     onClick={() => openAuthModal(isConfigured ? 'signup' : 'config')}
-                    className="h-8 text-xs font-semibold gap-1.5"
+                    className="h-8 text-xs font-medium gap-1.5"
                   >
                     <UserPlus className="w-3.5 h-3.5" />
                     <span>Register</span>
                   </Button>
                   <Button
                     size="sm"
-                    variant="amber"
+                    variant="default"
                     onClick={() => openAuthModal(isConfigured ? 'signin' : 'config')}
-                    className="h-8 text-xs font-bold gap-1.5"
+                    className="h-8 text-xs font-medium gap-1.5"
                   >
                     <LogIn className="w-3.5 h-3.5" />
                     <span>Sign In</span>
@@ -346,60 +346,60 @@ export const SettingsView: React.FC = () => {
           </div>
         </CardHeader>
 
-        <CardContent className="p-4 sm:p-6 space-y-4">
+        <CardContent className="p-4 sm:p-5 space-y-3">
           {isAuthenticated ? (
-            <div className="p-4 rounded-xl bg-muted/40 border border-border space-y-3">
+            <div className="p-3.5 rounded-lg bg-muted/20 border border-border space-y-3">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-amber-600 text-white font-bold text-base flex items-center justify-center shrink-0 shadow-xs">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-full bg-foreground text-background font-medium text-xs flex items-center justify-center shrink-0">
                     {(user?.email || 'U').charAt(0).toUpperCase()}
                   </div>
                   <div>
-                    <h4 className="font-bold text-foreground text-sm">
+                    <h4 className="font-medium text-foreground text-xs">
                       {user?.user_metadata?.full_name || user?.email?.split('@')[0]}
                     </h4>
-                    <p className="text-xs text-muted-foreground">{user?.email}</p>
+                    <p className="text-[11px] text-muted-foreground">{user?.email}</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2 text-xs">
-                  <Badge variant="outline" className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 gap-1 py-1">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
+                  <Badge variant="outline" className="bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/30 gap-1 py-0.5 text-[10px]">
+                    <CheckCircle2 className="w-3 h-3" />
                     <span>RLS Protected (UUID: {user?.id.slice(0, 8)}...)</span>
                   </Badge>
                 </div>
               </div>
 
-              <div className="text-xs text-muted-foreground border-t border-border pt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div className="text-xs text-muted-foreground border-t border-border pt-2.5 grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <div>
-                  <span className="font-semibold text-foreground">User ID (auth.uid()):</span>
-                  <p className="font-mono text-[11px] select-all truncate text-muted-foreground/90 mt-0.5">
+                  <span className="font-medium text-foreground text-[11px]">User ID (auth.uid()):</span>
+                  <p className="font-mono text-[11px] select-all truncate text-muted-foreground mt-0.5">
                     {user?.id}
                   </p>
                 </div>
                 <div>
-                  <span className="font-semibold text-foreground">Security Scope:</span>
-                  <p className="text-[11px] text-muted-foreground/90 mt-0.5">
-                    All timesheet entries in database are scoped to <code className="font-mono bg-muted px-1 py-0.5 rounded">user_id = auth.uid()</code>
+                  <span className="font-medium text-foreground text-[11px]">Security Scope:</span>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">
+                    All timesheet entries in database are scoped to <code className="font-mono bg-muted px-1 py-0.5 rounded text-[10px]">user_id = auth.uid()</code>
                   </p>
                 </div>
               </div>
             </div>
           ) : (
-            <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 space-y-2">
-              <div className="flex items-center gap-2 font-bold text-xs text-amber-900 dark:text-amber-300">
-                <Lock className="w-4 h-4 text-amber-600 shrink-0" />
-                <span>Currently Operating in Local Offline Mode</span>
+            <div className="p-3.5 rounded-lg bg-muted/20 border border-border space-y-2">
+              <div className="flex items-center gap-2 font-medium text-xs text-foreground">
+                <Lock className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                <span>Operating in Local Offline Mode</span>
               </div>
-              <p className="text-xs text-amber-800 dark:text-amber-300 leading-relaxed">
-                Your entries are currently stored only inside your browser's IndexedDB. To enable private cloud sync with multi-user isolation, sign in with your Supabase account. Each user only sees and modifies their own logs.
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Your entries are stored locally inside your browser's IndexedDB. To enable private cloud sync with multi-user isolation, connect your Supabase project.
               </p>
               <div className="pt-1">
                 <Button
                   size="sm"
-                  variant="amber"
+                  variant="outline"
                   onClick={() => openAuthModal(isConfigured ? 'signin' : 'config')}
-                  className="text-xs font-bold gap-1.5"
+                  className="text-xs font-medium gap-1.5 h-7"
                 >
                   <LogIn className="w-3.5 h-3.5" />
                   <span>Connect / Sign In with Supabase</span>
@@ -411,35 +411,35 @@ export const SettingsView: React.FC = () => {
       </Card>
 
       {/* 2. General & Timesheet Default Settings */}
-      <Card className="border-border">
-        <CardHeader className="pb-4 border-b border-border">
+      <Card className="border-border shadow-xs">
+        <CardHeader className="pb-3.5 border-b border-border">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center">
-              <User className="w-5 h-5" />
+            <div className="w-8 h-8 rounded-lg bg-muted/80 text-foreground flex items-center justify-center">
+              <User className="w-4 h-4" />
             </div>
             <div>
-              <CardTitle className="text-lg font-bold">
+              <CardTitle className="text-sm sm:text-base font-semibold tracking-tight">
                 Profile & Timesheet Defaults
               </CardTitle>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-muted-foreground mt-0.5">
                 Configured values will auto-populate new work entries and generated Excel timesheets
               </p>
             </div>
           </div>
         </CardHeader>
 
-        <CardContent className="p-4 sm:p-6">
+        <CardContent className="p-4 sm:p-5">
           {savedFeedback && (
-            <div className="mb-4 p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 rounded-xl flex items-center gap-2 text-emerald-800 dark:text-emerald-300 text-xs font-semibold">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+            <div className="mb-3.5 p-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-lg flex items-center gap-2 text-emerald-700 dark:text-emerald-400 text-xs font-medium">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
               <span>Settings saved successfully!</span>
             </div>
           )}
 
-          <form onSubmit={handleSaveSettings} className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <form onSubmit={handleSaveSettings} className="space-y-3.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               <div>
-                <label className="block text-xs font-semibold text-foreground mb-1">
+                <label className="block text-xs font-medium text-muted-foreground mb-1">
                   Your Name / Timesheet Author
                 </label>
                 <Input
@@ -447,15 +447,15 @@ export const SettingsView: React.FC = () => {
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
                   placeholder="Yoosuf"
-                  className="h-10 text-sm"
+                  className="h-9 text-xs"
                 />
-                <span className="text-[11px] text-muted-foreground mt-1 block">
-                  Used in file naming: <span className="font-mono text-foreground font-semibold">Timesheet-{userName || 'Name'}-August-2026.xlsx</span>
+                <span className="text-[10px] text-muted-foreground mt-1 block">
+                  Used in filename: <span className="font-mono text-foreground">Timesheet-{userName || 'Name'}-August-2026.xlsx</span>
                 </span>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-foreground mb-1">
+                <label className="block text-xs font-medium text-muted-foreground mb-1">
                   Default Working Hours (HH:MM or Decimal)
                 </label>
                 <Input
@@ -463,17 +463,17 @@ export const SettingsView: React.FC = () => {
                   value={defaultHours}
                   onChange={(e) => setDefaultHours(e.target.value)}
                   placeholder="08:00"
-                  className="h-10 text-sm font-mono"
+                  className="h-9 text-xs font-mono"
                 />
-                <span className="text-[11px] text-muted-foreground mt-1 block">
+                <span className="text-[10px] text-muted-foreground mt-1 block">
                   e.g. "8", "8:00", "8.5" &rarr; defaults to 8h 00m standard day
                 </span>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-1">
               <div>
-                <label className="block text-xs font-semibold text-foreground mb-1">
+                <label className="block text-xs font-medium text-muted-foreground mb-1">
                   Default Client
                 </label>
                 <Input
@@ -481,12 +481,12 @@ export const SettingsView: React.FC = () => {
                   value={defaultClient}
                   onChange={(e) => setDefaultClient(e.target.value)}
                   placeholder="Evolver"
-                  className="h-10 text-sm"
+                  className="h-9 text-xs"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-foreground mb-1">
+                <label className="block text-xs font-medium text-muted-foreground mb-1">
                   Default Project
                 </label>
                 <Input
@@ -494,12 +494,12 @@ export const SettingsView: React.FC = () => {
                   value={defaultProject}
                   onChange={(e) => setDefaultProject(e.target.value)}
                   placeholder="ARIA"
-                  className="h-10 text-sm"
+                  className="h-9 text-xs"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-foreground mb-1">
+                <label className="block text-xs font-medium text-muted-foreground mb-1">
                   Default Job / Role
                 </label>
                 <Input
@@ -507,18 +507,18 @@ export const SettingsView: React.FC = () => {
                   value={defaultJob}
                   onChange={(e) => setDefaultJob(e.target.value)}
                   placeholder="Development"
-                  className="h-10 text-sm"
+                  className="h-9 text-xs"
                 />
               </div>
             </div>
 
-            <div className="pt-2 flex justify-end">
+            <div className="pt-1 flex justify-end">
               <Button
                 type="submit"
                 id="btn-save-settings"
-                className="bg-amber-600 hover:bg-amber-700 text-white font-bold gap-2 text-xs"
+                className="font-medium gap-1.5 text-xs h-8 px-3 rounded-md"
               >
-                <Save className="w-4 h-4" />
+                <Save className="w-3.5 h-3.5" />
                 <span>Save Profile Defaults</span>
               </Button>
             </div>
@@ -527,23 +527,23 @@ export const SettingsView: React.FC = () => {
       </Card>
 
       {/* 3. Supabase Cloud Sync & RLS Schema Setup */}
-      <Card className="border-border">
-        <CardHeader className="pb-4 border-b border-border">
+      <Card className="border-border shadow-xs">
+        <CardHeader className="pb-3.5 border-b border-border">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
-                <Cloud className="w-5 h-5" />
+              <div className="w-8 h-8 rounded-lg bg-muted/80 text-foreground flex items-center justify-center">
+                <Cloud className="w-4 h-4" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <CardTitle className="text-lg font-bold">
+                  <CardTitle className="text-sm sm:text-base font-semibold tracking-tight">
                     Supabase PostgreSQL & Cloud Sync
                   </CardTitle>
-                  <Badge variant="emerald" className="text-[10px]">
+                  <Badge variant="secondary" className="text-[10px]">
                     RLS Enabled
                   </Badge>
                 </div>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-muted-foreground mt-0.5">
                   Sync work logs to your private Supabase database with Row Level Security
                 </p>
               </div>
@@ -554,48 +554,39 @@ export const SettingsView: React.FC = () => {
               variant="outline"
               size="sm"
               onClick={() => setShowSqlSchema((prev) => !prev)}
-              className="gap-1.5 text-xs font-semibold shrink-0 self-start sm:self-auto"
+              className="gap-1.5 text-xs font-medium shrink-0 self-start sm:self-auto h-8"
             >
               <Code2 className="w-3.5 h-3.5" />
-              <span>{showSqlSchema ? 'Hide SQL Script' : 'Supabase SQL Schema & RLS'}</span>
+              <span>{showSqlSchema ? 'Hide SQL Script' : 'SQL Schema & RLS'}</span>
             </Button>
           </div>
         </CardHeader>
 
-        <CardContent className="p-4 sm:p-6 space-y-4">
+        <CardContent className="p-4 sm:p-5 space-y-3.5">
           {/* Schema Drawer */}
           {showSqlSchema && (
-            <div className="p-4 rounded-xl bg-slate-900 text-slate-100 border border-slate-800 space-y-3">
+            <div className="p-3.5 rounded-lg bg-muted/40 border border-border space-y-2.5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Code2 className="w-4 h-4 text-emerald-400" />
-                  <span className="text-xs font-bold text-slate-200">
-                    Supabase SQL Editor Script (Run in Dashboard)
+                  <Code2 className="w-3.5 h-3.5 text-foreground" />
+                  <span className="text-xs font-medium text-foreground">
+                    Supabase SQL Editor Script
                   </span>
                 </div>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={handleCopySql}
-                  className="h-7 text-xs bg-slate-800 hover:bg-slate-700 text-emerald-400 border-slate-700"
+                  className="h-7 text-xs"
                 >
-                  {copiedSql ? <Check className="w-3.5 h-3.5 mr-1" /> : <Copy className="w-3.5 h-3.5 mr-1" />}
-                  <span>{copiedSql ? 'Copied!' : 'Copy SQL Script'}</span>
+                  {copiedSql ? <Check className="w-3 h-3 mr-1" /> : <Copy className="w-3 h-3 mr-1" />}
+                  <span>{copiedSql ? 'Copied' : 'Copy Script'}</span>
                 </Button>
               </div>
-              <p className="text-[11px] text-slate-400">
-                Paste this into your{' '}
-                <a
-                  href="https://supabase.com/dashboard"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-emerald-400 underline inline-flex items-center gap-0.5"
-                >
-                  Supabase Dashboard <ExternalLink className="w-3 h-3" />
-                </a>{' '}
-                &rarr; <strong>SQL Editor &rarr; New Query &rarr; Run</strong>. It enables Row Level Security (RLS) so each user only sees and modifies their own records.
+              <p className="text-xs text-muted-foreground">
+                Paste this into your Supabase Dashboard &rarr; SQL Editor &rarr; New Query &rarr; Run.
               </p>
-              <pre className="text-[11px] font-mono text-emerald-300 bg-black/50 p-3 rounded-lg overflow-x-auto max-h-64 scrollbar-thin">
+              <pre className="text-[11px] font-mono bg-background p-3 rounded border border-border overflow-x-auto max-h-52">
                 {SUPABASE_SQL_SCHEMA}
               </pre>
             </div>
@@ -604,59 +595,26 @@ export const SettingsView: React.FC = () => {
           {/* Sync Feedback */}
           {supabaseSyncFeedback && (
             <div
-              className={`p-3 rounded-xl flex items-center gap-2 text-xs font-semibold ${
+              className={`p-2.5 rounded-lg flex items-center gap-2 text-xs font-medium ${
                 supabaseSyncFeedback.type === 'success'
-                  ? 'bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 text-emerald-800 dark:text-emerald-300'
-                  : 'bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 text-rose-800 dark:text-rose-300'
+                  ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-400'
+                  : 'bg-rose-500/10 border border-rose-500/20 text-rose-700 dark:text-rose-400'
               }`}
             >
               {supabaseSyncFeedback.type === 'success' ? (
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
               ) : (
-                <AlertTriangle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" />
+                <AlertTriangle className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400 shrink-0" />
               )}
               <span>{supabaseSyncFeedback.message}</span>
             </div>
           )}
 
-          {/* Connection Status Box */}
-          {supabaseStatus && (
-            <div
-              className={`p-3 rounded-xl flex items-start gap-2.5 text-xs font-medium ${
-                supabaseStatus.success
-                  ? supabaseStatus.tablesExist
-                    ? 'bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 text-emerald-900 dark:text-emerald-200'
-                    : 'bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/60 text-amber-900 dark:text-amber-200'
-                  : 'bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 text-rose-900 dark:text-rose-200'
-              }`}
-            >
-              {supabaseStatus.success ? (
-                supabaseStatus.tablesExist ? (
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                ) : (
-                  <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
-                )
-              ) : (
-                <AlertTriangle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
-              )}
-              <div>
-                <p className="font-bold">
-                  {supabaseStatus.success
-                    ? supabaseStatus.tablesExist
-                      ? 'Connected & Ready'
-                      : 'Connected (Setup Required)'
-                    : 'Connection Error'}
-                </p>
-                <p className="text-[11px] opacity-90 mt-0.5">{supabaseStatus.message}</p>
-              </div>
-            </div>
-          )}
-
           {/* Credentials Form */}
-          <div className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-foreground mb-1">
+                <label className="block text-xs font-medium text-muted-foreground mb-1">
                   Supabase Project URL
                 </label>
                 <Input
@@ -664,12 +622,12 @@ export const SettingsView: React.FC = () => {
                   value={supabaseUrl}
                   onChange={(e) => setSupabaseUrl(e.target.value)}
                   placeholder="https://xyz.supabase.co"
-                  className="font-mono text-xs h-10"
+                  className="font-mono text-xs h-9"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-foreground mb-1">
+                <label className="block text-xs font-medium text-muted-foreground mb-1">
                   Publishable / Anon API Key
                 </label>
                 <Input
@@ -677,12 +635,12 @@ export const SettingsView: React.FC = () => {
                   value={supabaseKey}
                   onChange={(e) => setSupabaseKey(e.target.value)}
                   placeholder="sb_publishable_... or eyJhbGciOi..."
-                  className="font-mono text-xs h-10"
+                  className="font-mono text-xs h-9"
                 />
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+            <div className="flex flex-wrap items-center justify-between gap-2.5 pt-1">
               <div className="flex items-center gap-2">
                 <Button
                   type="button"
@@ -690,7 +648,7 @@ export const SettingsView: React.FC = () => {
                   size="sm"
                   onClick={handleSaveSupabaseConfig}
                   disabled={!supabaseUrl.trim() && !supabaseKey.trim()}
-                  className="text-xs"
+                  className="text-xs h-8"
                 >
                   Save Credentials
                 </Button>
@@ -700,12 +658,12 @@ export const SettingsView: React.FC = () => {
                   size="sm"
                   onClick={handleTestSupabaseConnection}
                   disabled={isTestingSupabase || !supabaseUrl || !supabaseKey}
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs gap-1.5 font-bold"
+                  className="text-xs gap-1.5 font-medium h-8"
                 >
                   {isTestingSupabase ? (
-                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    <RefreshCw className="w-3 h-3 animate-spin" />
                   ) : (
-                    <Check className="w-3.5 h-3.5" />
+                    <Check className="w-3 h-3" />
                   )}
                   <span>Test Connection</span>
                 </Button>
@@ -716,36 +674,31 @@ export const SettingsView: React.FC = () => {
                     variant="ghost"
                     size="sm"
                     onClick={handleClearSupabaseConfig}
-                    className="text-xs text-rose-600 hover:text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-950/40"
+                    className="text-xs text-rose-600 hover:text-rose-700 h-8"
                   >
-                    Clear / Disconnect
+                    Disconnect
                   </Button>
                 )}
               </div>
 
               {lastSyncTime && (
-                <span className="text-[11px] text-muted-foreground">
+                <span className="text-[10px] text-muted-foreground">
                   Last synced: {new Date(lastSyncTime).toLocaleDateString()} {new Date(lastSyncTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </span>
               )}
             </div>
 
             {/* Continuous Dual Sync Live Status Card */}
-            <div className="p-4 rounded-xl bg-muted/40 border border-border space-y-3">
+            <div className="p-3 rounded-lg bg-muted/20 border border-border space-y-2">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
-                    <Cloud className="w-4 h-4" />
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded bg-muted flex items-center justify-center shrink-0">
+                    <Cloud className="w-3.5 h-3.5 text-foreground" />
                   </div>
                   <div>
-                    <div className="flex items-center gap-2">
-                      <h4 className="font-bold text-foreground text-sm">Automatic Dual-Storage Synchronization</h4>
-                      <Badge variant="outline" className="text-[10px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20">
-                        Active & Real-Time
-                      </Badge>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      All your timesheets, day classifications, and work logs are continuously written to local IndexedDB and synced to your Supabase PostgreSQL cloud tables.
+                    <h4 className="font-medium text-foreground text-xs">Automatic Dual-Storage Sync</h4>
+                    <p className="text-[11px] text-muted-foreground">
+                      Timesheets and logs are continuously stored locally in IndexedDB and synced to Supabase.
                     </p>
                   </div>
                 </div>
@@ -756,67 +709,56 @@ export const SettingsView: React.FC = () => {
                   size="sm"
                   onClick={handlePullFromSupabase}
                   disabled={isSyncingSupabase || !supabaseUrl || !supabaseKey}
-                  className="text-xs font-semibold gap-1.5 shrink-0 self-start sm:self-auto cursor-pointer"
+                  className="text-xs font-medium gap-1.5 shrink-0 self-start sm:self-auto h-7 px-2.5"
                 >
-                  {isSyncingSupabase ? (
-                    <RefreshCw className="w-3.5 h-3.5 animate-spin text-amber-500" />
-                  ) : (
-                    <RefreshCw className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                  )}
+                  <RefreshCw className={`w-3 h-3 ${isSyncingSupabase ? 'animate-spin' : ''}`} />
                   <span>Refresh Cloud Data</span>
                 </Button>
               </div>
-
-              {lastSyncTime && (
-                <div className="text-[11px] text-muted-foreground flex items-center gap-1.5 pt-1 border-t border-border/60">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
-                  <span>Last synced with Supabase: {new Date(lastSyncTime).toLocaleDateString()} at {new Date(lastSyncTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</span>
-                </div>
-              )}
             </div>
           </div>
         </CardContent>
       </Card>
 
       {/* 4. Backup & Restore (Local IndexedDB JSON) */}
-      <Card className="border-border">
-        <CardHeader className="pb-4 border-b border-border">
+      <Card className="border-border shadow-xs">
+        <CardHeader className="pb-3.5 border-b border-border">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 flex items-center justify-center">
-              <Database className="w-5 h-5" />
+            <div className="w-8 h-8 rounded-lg bg-muted/80 text-foreground flex items-center justify-center">
+              <Database className="w-4 h-4" />
             </div>
             <div>
-              <CardTitle className="text-lg font-bold">
-                Offline JSON Backup & Restore
+              <CardTitle className="text-sm sm:text-base font-semibold tracking-tight">
+                JSON Backup & Restore
               </CardTitle>
-              <p className="text-xs text-muted-foreground">
-                All your data is stored locally in your browser's IndexedDB. Export file backups anytime for offline safety.
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Export or import full snapshot backups for offline safety
               </p>
             </div>
           </div>
         </CardHeader>
 
-        <CardContent className="p-4 sm:p-6 space-y-4">
+        <CardContent className="p-4 sm:p-5 space-y-3.5">
           {importError && (
-            <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 rounded-xl flex items-center gap-2 text-rose-800 dark:text-rose-300 text-xs font-semibold">
-              <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
+            <div className="p-2.5 bg-rose-500/10 border border-rose-500/20 rounded-lg flex items-center gap-2 text-rose-700 dark:text-rose-400 text-xs font-medium">
+              <AlertTriangle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
               <span>{importError}</span>
             </div>
           )}
 
           {importSuccess && (
-            <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 rounded-xl flex items-center gap-2 text-emerald-800 dark:text-emerald-300 text-xs font-semibold">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <div className="p-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-lg flex items-center gap-2 text-emerald-700 dark:text-emerald-400 text-xs font-medium">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
               <span>{importSuccess}</span>
             </div>
           )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {/* Export Backup Card */}
-            <div className="p-4 rounded-xl bg-muted/40 border border-border flex flex-col justify-between">
+            <div className="p-3.5 rounded-lg bg-muted/20 border border-border flex flex-col justify-between">
               <div>
-                <h4 className="font-bold text-foreground text-sm mb-1">Export Full Backup</h4>
-                <p className="text-xs text-muted-foreground mb-4">
+                <h4 className="font-medium text-foreground text-xs mb-1">Export Full Backup</h4>
+                <p className="text-xs text-muted-foreground mb-3">
                   Download a JSON snapshot containing all work logs, settings, and holidays.
                 </p>
               </div>
@@ -825,18 +767,18 @@ export const SettingsView: React.FC = () => {
                 variant="outline"
                 id="btn-export-backup"
                 onClick={exportBackup}
-                className="w-full gap-2 text-xs font-semibold"
+                className="w-full gap-2 text-xs font-medium h-8"
               >
-                <Download className="w-4 h-4" />
+                <Download className="w-3.5 h-3.5" />
                 <span>Export JSON Backup</span>
               </Button>
             </div>
 
             {/* Import Backup Card */}
-            <div className="p-4 rounded-xl bg-muted/40 border border-border flex flex-col justify-between">
+            <div className="p-3.5 rounded-lg bg-muted/20 border border-border flex flex-col justify-between">
               <div>
-                <h4 className="font-bold text-foreground text-sm mb-1">Import Backup</h4>
-                <p className="text-xs text-muted-foreground mb-4">
+                <h4 className="font-medium text-foreground text-xs mb-1">Import Backup</h4>
+                <p className="text-xs text-muted-foreground mb-3">
                   Restore from a previously exported JSON backup file.
                 </p>
               </div>
@@ -851,10 +793,10 @@ export const SettingsView: React.FC = () => {
                 />
                 <label
                   htmlFor="input-file-backup"
-                  className="flex items-center justify-center gap-2 w-full py-2 px-3 bg-background border border-input hover:bg-accent text-foreground text-xs font-semibold rounded-xl transition-colors cursor-pointer shadow-2xs"
+                  className="flex items-center justify-center gap-2 w-full py-1.5 px-3 bg-background border border-border hover:bg-muted text-foreground text-xs font-medium rounded-md transition-colors cursor-pointer"
                 >
-                  <Upload className="w-4 h-4 text-muted-foreground" />
-                  <span>Select Backup JSON File</span>
+                  <Upload className="w-3.5 h-3.5 text-muted-foreground" />
+                  <span>Select JSON File</span>
                 </label>
               </div>
             </div>
@@ -862,50 +804,42 @@ export const SettingsView: React.FC = () => {
 
           {/* Restore Confirmation Drawer */}
           {importPreview && (
-            <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-3">
-              <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400 font-bold text-sm">
-                <AlertTriangle className="w-4 h-4" />
+            <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 space-y-2.5">
+              <div className="flex items-center gap-2 text-amber-700 dark:text-amber-300 font-medium text-xs">
+                <AlertTriangle className="w-3.5 h-3.5" />
                 <span>Confirm Backup Restore ({importPreview.daysCount} days found)</span>
               </div>
 
-              <p className="text-xs text-foreground">
-                Select how you would like to apply the imported data:
-              </p>
-
               <div className="flex items-center gap-4 text-xs">
-                <label className="flex items-center gap-1.5 cursor-pointer font-medium text-foreground">
+                <label className="flex items-center gap-1.5 cursor-pointer text-foreground font-medium">
                   <input
                     type="radio"
                     name="import-strat"
                     checked={importStrategy === 'merge'}
                     onChange={() => setImportStrategy('merge')}
-                    className="text-amber-600 focus:ring-amber-500"
                   />
-                  <span>Merge with existing records</span>
+                  <span>Merge with existing</span>
                 </label>
 
-                <label className="flex items-center gap-1.5 cursor-pointer font-medium text-foreground">
+                <label className="flex items-center gap-1.5 cursor-pointer text-foreground font-medium">
                   <input
                     type="radio"
                     name="import-strat"
                     checked={importStrategy === 'replace'}
                     onChange={() => setImportStrategy('replace')}
-                    className="text-amber-600 focus:ring-amber-500"
                   />
-                  <span>Replace all current records</span>
+                  <span>Replace all</span>
                 </label>
               </div>
 
               <div className="flex items-center gap-2 pt-1">
                 <Button
                   type="button"
-                  variant="amber"
                   size="sm"
                   onClick={handleExecuteRestore}
-                  className="text-xs font-bold gap-1.5"
+                  className="text-xs font-medium h-7"
                 >
-                  <Check className="w-3.5 h-3.5" />
-                  <span>Apply Restore</span>
+                  Apply Restore
                 </Button>
                 <Button
                   type="button"
@@ -915,7 +849,7 @@ export const SettingsView: React.FC = () => {
                     setImportPreview(null);
                     if (fileInputRef.current) fileInputRef.current.value = '';
                   }}
-                  className="text-xs text-muted-foreground"
+                  className="text-xs h-7 text-muted-foreground"
                 >
                   Cancel
                 </Button>
@@ -926,16 +860,16 @@ export const SettingsView: React.FC = () => {
       </Card>
 
       {/* 5. Danger Zone & Sample Data */}
-      <Card className="border-border">
-        <CardHeader className="pb-4 border-b border-border">
-          <CardTitle className="text-base font-bold text-foreground">
-            Data Reset & Sample Testing
+      <Card className="border-border shadow-xs">
+        <CardHeader className="pb-3 border-b border-border">
+          <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Data Management & Testing
           </CardTitle>
         </CardHeader>
-        <CardContent className="p-4 sm:p-6 space-y-4">
+        <CardContent className="p-4 sm:p-5 space-y-3">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <p className="text-xs font-bold text-foreground">Load Sample August 2026 Data</p>
+              <p className="text-xs font-medium text-foreground">Load Sample August 2026 Data</p>
               <p className="text-xs text-muted-foreground">
                 Populate August 2026 with realistic sample timesheet entries (40h/week, Evolver ARIA project).
               </p>
@@ -944,16 +878,16 @@ export const SettingsView: React.FC = () => {
               type="button"
               variant="outline"
               onClick={loadSampleAugust2026Data}
-              className="gap-2 text-xs font-semibold shrink-0"
+              className="gap-1.5 text-xs font-medium shrink-0 h-8"
             >
-              <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-              <span>Load Sample Data</span>
+              <Sparkles className="w-3.5 h-3.5 text-muted-foreground" />
+              <span>Load Sample</span>
             </Button>
           </div>
 
-          <div className="border-t border-border pt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="border-t border-border pt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <p className="text-xs font-bold text-rose-600 dark:text-rose-400">Clear All Local Data</p>
+              <p className="text-xs font-medium text-rose-600 dark:text-rose-400">Clear All Local Data</p>
               <p className="text-xs text-muted-foreground">
                 Erase all daily work entries, leave tags, and custom settings from this browser.
               </p>
@@ -962,10 +896,10 @@ export const SettingsView: React.FC = () => {
               type="button"
               variant="destructive"
               onClick={clearAllData}
-              className="gap-2 text-xs font-semibold shrink-0"
+              className="gap-1.5 text-xs font-medium shrink-0 h-8"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              <span>Reset & Clear Local DB</span>
+              <span>Reset Local DB</span>
             </Button>
           </div>
         </CardContent>

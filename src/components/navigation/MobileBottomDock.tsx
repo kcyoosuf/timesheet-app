@@ -93,12 +93,10 @@ export const MobileBottomDock: React.FC<MobileBottomDockProps> = ({
               to={item.to}
               id={`mobile-dock-${item.id}`}
               onClick={() => setActiveTab?.(item.id)}
-              className={`flex-1 flex flex-col items-center justify-center py-1.5 px-1 rounded-xl transition-all relative select-none cursor-pointer ${
+              className={`flex-1 flex flex-col items-center justify-center py-1.5 px-1 rounded-xl transition-colors relative select-none cursor-pointer ${
                 isActive
-                  ? isCenterAction
-                    ? 'bg-amber-400 text-amber-950 font-bold shadow-xs'
-                    : 'bg-primary text-primary-foreground font-semibold shadow-xs'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-accent/60'
+                  ? 'bg-primary text-primary-foreground font-medium shadow-xs'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
               }`}
             >
               {/* Icon Container with Badge */}
@@ -107,7 +105,7 @@ export const MobileBottomDock: React.FC<MobileBottomDockProps> = ({
 
                 {/* Badge indicator */}
                 {typeof item.badge === 'number' && item.badge > 0 && (
-                  <span className="absolute -top-1.5 -right-2 px-1 py-0.2 text-[9px] font-bold rounded-full bg-amber-500 text-white leading-none">
+                  <span className="absolute -top-1 -right-2 px-1 py-0.2 text-[9px] font-bold rounded-full bg-amber-500 text-white leading-none">
                     {item.badge}
                   </span>
                 )}

@@ -207,11 +207,11 @@ export const DailyEntryView: React.FC<DailyEntryViewProps> = ({ onSavedSuccess, 
   return (
     <div className="space-y-6">
       {/* Top Header: Date Selector & Quick Day Navigator */}
-      <Card className="border-border">
-        <CardContent className="p-4 sm:p-6">
+      <Card className="border-border shadow-xs">
+        <CardContent className="p-4 sm:p-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1 bg-muted p-1 rounded-xl border border-border">
+              <div className="flex items-center gap-0.5 bg-muted/60 p-0.5 rounded-lg border border-border">
                 <Button
                   variant="ghost"
                   size="iconSm"
@@ -219,9 +219,9 @@ export const DailyEntryView: React.FC<DailyEntryViewProps> = ({ onSavedSuccess, 
                   onClick={handlePrevDay}
                   title="Previous Day"
                   aria-label="Previous Day"
-                  className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                  className="h-7 w-7 text-muted-foreground hover:text-foreground"
                 >
-                  <ChevronLeft className="w-5 h-5" />
+                  <ChevronLeft className="w-4 h-4" />
                 </Button>
                 <Button
                   variant="ghost"
@@ -230,9 +230,9 @@ export const DailyEntryView: React.FC<DailyEntryViewProps> = ({ onSavedSuccess, 
                   onClick={handleNextDay}
                   title="Next Day"
                   aria-label="Next Day"
-                  className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                  className="h-7 w-7 text-muted-foreground hover:text-foreground"
                 >
-                  <ChevronRight className="w-5 h-5" />
+                  <ChevronRight className="w-4 h-4" />
                 </Button>
               </div>
 
@@ -244,15 +244,15 @@ export const DailyEntryView: React.FC<DailyEntryViewProps> = ({ onSavedSuccess, 
                     aria-label="Select date"
                     value={selectedDate}
                     onChange={(e) => e.target.value && handleSetDate(e.target.value)}
-                    className="font-bold text-lg sm:text-xl text-foreground bg-transparent border-b border-transparent hover:border-border focus:border-amber-500 focus:outline-none cursor-pointer"
+                    className="font-semibold text-base sm:text-lg text-foreground bg-transparent border-b border-transparent hover:border-border focus:border-foreground focus:outline-none cursor-pointer tracking-tight"
                   />
                   {selectedDate === getTodayIso() && (
-                    <Badge variant="amber" className="text-xs">
+                    <Badge variant="secondary" className="text-[11px] font-medium px-2 py-0.5">
                       Today
                     </Badge>
                   )}
                 </div>
-                <p className="text-xs text-muted-foreground font-medium">
+                <p className="text-xs text-muted-foreground font-normal">
                   {formatDisplayDate(selectedDate)}
                 </p>
               </div>
@@ -264,9 +264,9 @@ export const DailyEntryView: React.FC<DailyEntryViewProps> = ({ onSavedSuccess, 
                   variant="outline"
                   size="sm"
                   onClick={handleGoToToday}
-                  className="text-xs font-semibold"
+                  className="text-xs font-medium h-8"
                 >
-                  Jump to Today
+                  Today
                 </Button>
               )}
 
@@ -275,34 +275,34 @@ export const DailyEntryView: React.FC<DailyEntryViewProps> = ({ onSavedSuccess, 
                 size="sm"
                 id="btn-save-day-top"
                 onClick={handleSaveDay}
-                className="gap-1.5 font-bold"
+                className="gap-1.5 font-medium text-xs h-8"
               >
-                <Save className="w-4 h-4" />
-                <span>Save Day</span>
+                <Save className="w-3.5 h-3.5" />
+                <span>Save</span>
               </Button>
             </div>
           </div>
 
           {/* Saved Success Toast */}
           {isSavedAlert && (
-            <div className="mt-4 p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 rounded-xl flex items-center gap-2 text-emerald-800 dark:text-emerald-300 text-xs font-semibold animate-fade-in">
+            <div className="mt-3 p-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-lg flex items-center gap-2 text-emerald-700 dark:text-emerald-400 text-xs font-medium animate-fade-in">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-              <span>Day record saved to local IndexedDB & synced to Supabase on the go!</span>
+              <span>Day record saved successfully.</span>
             </div>
           )}
 
           {/* Day Classification Form */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 pt-5 border-t border-border">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4 pt-4 border-t border-border">
             {/* Day Type Selector */}
             <div>
-              <label htmlFor="select-day-type" className="block text-xs font-semibold text-foreground mb-1.5">
+              <label htmlFor="select-day-type" className="block text-xs font-medium text-muted-foreground mb-1">
                 Day Type
               </label>
               <Select
                 value={dayType}
                 onValueChange={(val) => handleDayTypeChange(val as DayType)}
               >
-                <SelectTrigger id="select-day-type" className="w-full text-sm font-medium h-10">
+                <SelectTrigger id="select-day-type" className="w-full text-xs font-medium h-9">
                   <SelectValue placeholder="Select day type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -318,10 +318,10 @@ export const DailyEntryView: React.FC<DailyEntryViewProps> = ({ onSavedSuccess, 
 
             {/* Working Hours Input */}
             <div>
-              <label htmlFor="input-hours" className="block text-xs font-semibold text-foreground mb-1.5">
-                Hours (HH:MM or Decimal)
+              <label htmlFor="input-hours" className="block text-xs font-medium text-muted-foreground mb-1">
+                Hours
               </label>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <Input
                   type="text"
                   id="input-hours"
@@ -329,7 +329,7 @@ export const DailyEntryView: React.FC<DailyEntryViewProps> = ({ onSavedSuccess, 
                   disabled={dayType !== DayType.WORKING}
                   onChange={(e) => setHoursInput(e.target.value)}
                   placeholder="08:00"
-                  className="font-mono text-sm h-10"
+                  className="font-mono text-xs h-9"
                 />
                 <div className="flex items-center gap-1 shrink-0">
                   {['8h', '7.5h', '4h'].map((preset) => (
@@ -340,7 +340,7 @@ export const DailyEntryView: React.FC<DailyEntryViewProps> = ({ onSavedSuccess, 
                       size="sm"
                       disabled={dayType !== DayType.WORKING}
                       onClick={() => setHoursInput(preset)}
-                      className="px-2 py-1 h-9 text-xs font-medium"
+                      className="px-2 h-9 text-xs font-medium"
                     >
                       {preset}
                     </Button>
@@ -351,8 +351,8 @@ export const DailyEntryView: React.FC<DailyEntryViewProps> = ({ onSavedSuccess, 
 
             {/* Optional Notes */}
             <div>
-              <label htmlFor="input-day-notes" className="block text-xs font-semibold text-foreground mb-1.5">
-                Day Notes / Holiday Name
+              <label htmlFor="input-day-notes" className="block text-xs font-medium text-muted-foreground mb-1">
+                Notes
               </label>
               <Input
                 type="text"
@@ -360,7 +360,7 @@ export const DailyEntryView: React.FC<DailyEntryViewProps> = ({ onSavedSuccess, 
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="e.g. Sprint demo or half-day"
-                className="h-10 text-sm"
+                className="h-9 text-xs"
               />
             </div>
           </div>
@@ -369,35 +369,35 @@ export const DailyEntryView: React.FC<DailyEntryViewProps> = ({ onSavedSuccess, 
 
       {/* Main Work Log Section */}
       {dayType === DayType.WORKING && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
           {/* Left Column: Paste Daily Update Box */}
-          <Card className="lg:col-span-5 border-border flex flex-col justify-between">
+          <Card className="lg:col-span-5 border-border shadow-xs flex flex-col justify-between">
             <CardHeader className="pb-3 border-b border-border">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-foreground font-bold text-sm">
-                  <FileText className="w-4 h-4 text-amber-600" />
-                  <CardTitle className="text-sm">Paste Daily Update</CardTitle>
+                <div className="flex items-center gap-2 text-foreground font-semibold text-xs">
+                  <FileText className="w-3.5 h-3.5 text-muted-foreground" />
+                  <CardTitle className="text-xs font-semibold">Paste Daily Update</CardTitle>
                 </div>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => setRawPastedText('')}
-                  className="h-7 text-xs text-muted-foreground hover:text-foreground"
+                  className="h-6 text-xs text-muted-foreground hover:text-foreground px-2"
                 >
                   Clear
                 </Button>
               </div>
             </CardHeader>
 
-            <CardContent className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
+            <CardContent className="p-4 flex-1 flex flex-col justify-between">
               <div>
                 <p className="text-xs text-muted-foreground mb-3 leading-relaxed">
-                  Paste your daily update text below. The parser extracts tickets (e.g. ARIA-5854), PR links, branch, status, and description.
+                  Paste your raw standup or work notes. The parser extracts ticket IDs, PR links, branch, and status automatically.
                 </p>
 
                 <Textarea
                   id="textarea-raw-update"
-                  rows={10}
+                  rows={8}
                   value={rawPastedText}
                   onChange={(e) => setRawPastedText(e.target.value)}
                   placeholder={`Example update format:
@@ -406,20 +406,20 @@ Added reanalyzing status support to My Work - ARIA-5854
 Status - Done
 PR - https://github.com/EvolverHub/frontend/pull/550
 Branch - feature/aria-5854`}
-                  className="font-mono text-xs sm:text-sm min-h-[200px]"
+                  className="font-mono text-xs min-h-[180px]"
                 />
               </div>
 
-              <div className="mt-4 pt-3 border-t border-border">
+              <div className="mt-3 pt-3 border-t border-border">
                 <Button
-                  variant="amber"
+                  variant="default"
                   size="default"
                   id="btn-parse-update"
                   onClick={handleParseUpdate}
                   disabled={!rawPastedText.trim()}
-                  className="w-full gap-2 font-bold"
+                  className="w-full gap-2 font-medium text-xs h-9"
                 >
-                  <Sparkles className="w-4 h-4" />
+                  <Sparkles className="w-3.5 h-3.5" />
                   <span>Parse Update</span>
                 </Button>
               </div>
@@ -427,14 +427,14 @@ Branch - feature/aria-5854`}
           </Card>
 
           {/* Right Column: Extracted Structured Work Entries */}
-          <Card className="lg:col-span-7 border-border">
+          <Card className="lg:col-span-7 border-border shadow-xs">
             <CardHeader className="pb-3 border-b border-border">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <CardTitle className="text-sm font-bold">
-                    Structured Work Entries ({entries.length})
+                  <CardTitle className="text-xs font-semibold">
+                    Work Entries ({entries.length})
                   </CardTitle>
-                  <Badge variant="outline" className="text-xs font-normal">
+                  <Badge variant="outline" className="text-[10px] font-normal px-1.5 py-0">
                     Editable
                   </Badge>
                 </div>
@@ -444,46 +444,46 @@ Branch - feature/aria-5854`}
                   size="sm"
                   id="btn-add-entry"
                   onClick={handleAddManualEntry}
-                  className="gap-1 text-xs"
+                  className="gap-1 text-xs h-7 px-2"
                 >
-                  <Plus className="w-3.5 h-3.5" />
+                  <Plus className="w-3 h-3" />
                   <span>Add Entry</span>
                 </Button>
               </div>
             </CardHeader>
 
-            <CardContent className="p-4 sm:p-5">
+            <CardContent className="p-4">
               {entries.length === 0 ? (
-                <div className="text-center py-10 px-4 border-2 border-dashed border-border rounded-xl">
-                  <FileText className="w-8 h-8 text-muted-foreground/40 mx-auto mb-2" />
-                  <p className="text-sm font-semibold text-foreground">No work entries parsed yet</p>
-                  <p className="text-xs text-muted-foreground max-w-sm mx-auto mt-1 mb-4">
-                    Paste your daily update on the left and click "Parse Update", or add an entry manually.
+                <div className="text-center py-8 px-4 border border-dashed border-border rounded-lg">
+                  <FileText className="w-6 h-6 text-muted-foreground/50 mx-auto mb-2" />
+                  <p className="text-xs font-medium text-foreground">No entries yet</p>
+                  <p className="text-xs text-muted-foreground max-w-xs mx-auto mt-1 mb-3">
+                    Paste update on the left and click Parse, or create manually.
                   </p>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={handleAddManualEntry}
-                    className="gap-1.5 text-xs font-semibold"
+                    className="gap-1 text-xs h-7"
                   >
-                    <Plus className="w-3.5 h-3.5" />
-                    <span>Create Manual Entry</span>
+                    <Plus className="w-3 h-3" />
+                    <span>Create Entry</span>
                   </Button>
                 </div>
               ) : (
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {entries.map((entry, index) => (
                     <div
                       key={entry.id || index}
-                      className="p-4 rounded-xl bg-muted/40 border border-border relative group hover:border-border transition-colors"
+                      className="p-3.5 rounded-lg bg-muted/20 border border-border relative transition-colors"
                     >
                       {/* Entry Header: Ticket numbers & Status */}
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-3">
-                        <div className="flex items-center gap-2 flex-1 min-w-0">
-                          <Tag className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2.5">
+                        <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                          <Tag className="w-3 h-3 text-muted-foreground shrink-0" />
                           <Input
                             type="text"
-                            placeholder="Tickets e.g. ARIA-5854, ARIA-5855"
+                            placeholder="e.g. ARIA-5854"
                             value={(entry.tickets || []).join(', ')}
                             onChange={(e) =>
                               handleUpdateEntry(index, {
@@ -493,16 +493,16 @@ Branch - feature/aria-5854`}
                                   .filter(Boolean),
                               })
                             }
-                            className="font-mono font-bold text-xs h-8 w-full sm:w-64"
+                            className="font-mono font-medium text-xs h-7 w-full sm:w-56"
                           />
                         </div>
 
-                        <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0">
+                        <div className="flex items-center justify-between sm:justify-end gap-1.5 shrink-0">
                           <Select
                             value={entry.status || 'Done'}
                             onValueChange={(val) => handleUpdateEntry(index, { status: val })}
                           >
-                            <SelectTrigger aria-label="Entry status" className="h-8 text-xs font-semibold w-[120px]">
+                            <SelectTrigger aria-label="Entry status" className="h-7 text-xs font-medium w-[110px]">
                               <SelectValue placeholder="Status" />
                             </SelectTrigger>
                             <SelectContent>
@@ -518,25 +518,25 @@ Branch - feature/aria-5854`}
                             variant="ghost"
                             size="iconSm"
                             onClick={() => handleDeleteEntry(index)}
-                            className="text-muted-foreground hover:text-rose-600 h-8 w-8"
+                            className="text-muted-foreground hover:text-rose-600 h-7 w-7"
                             title="Delete this entry"
                           >
-                            <Trash2 className="w-4 h-4" />
+                            <Trash2 className="w-3.5 h-3.5" />
                           </Button>
                         </div>
                       </div>
 
                       {/* Description Textarea */}
-                      <div className="mb-3">
-                        <label className="block text-[11px] font-semibold text-muted-foreground mb-1">
-                          Description (Mandatory for Timesheet)
+                      <div className="mb-2.5">
+                        <label className="block text-[10px] font-medium text-muted-foreground mb-1">
+                          Description
                         </label>
                         <Textarea
                           rows={2}
                           value={entry.description || ''}
                           onChange={(e) => handleUpdateEntry(index, { description: e.target.value })}
                           placeholder="Work description..."
-                          className="text-xs sm:text-sm min-h-[60px]"
+                          className="text-xs min-h-[50px]"
                         />
                       </div>
 
@@ -544,8 +544,8 @@ Branch - feature/aria-5854`}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                         {/* PR Input */}
                         <div>
-                          <div className="flex items-center gap-1.5 mb-1 text-muted-foreground font-medium text-[11px]">
-                            <GitPullRequest className="w-3 h-3 text-purple-500" />
+                          <div className="flex items-center gap-1 mb-1 text-muted-foreground font-medium text-[10px]">
+                            <GitPullRequest className="w-3 h-3 text-muted-foreground" />
                             <span>PR Link or #Number</span>
                           </div>
                           <div className="flex items-center gap-1">
@@ -568,10 +568,10 @@ Branch - feature/aria-5854`}
                                 href={entry.prUrl}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="p-1 text-purple-600 hover:text-purple-400"
+                                className="p-1 text-muted-foreground hover:text-foreground"
                                 title="Open PR URL"
                               >
-                                <ExternalLink className="w-3.5 h-3.5" />
+                                <ExternalLink className="w-3 h-3" />
                               </a>
                             )}
                           </div>
@@ -579,8 +579,8 @@ Branch - feature/aria-5854`}
 
                         {/* Branch Input */}
                         <div>
-                          <div className="flex items-center gap-1.5 mb-1 text-muted-foreground font-medium text-[11px]">
-                            <GitBranch className="w-3 h-3 text-emerald-600" />
+                          <div className="flex items-center gap-1 mb-1 text-muted-foreground font-medium text-[10px]">
+                            <GitBranch className="w-3 h-3 text-muted-foreground" />
                             <span>Branch</span>
                           </div>
                           <Input
@@ -599,16 +599,16 @@ Branch - feature/aria-5854`}
 
               {/* Bottom Save Action */}
               {entries.length > 0 && (
-                <div className="mt-4 pt-4 border-t border-border flex items-center justify-end">
+                <div className="mt-4 pt-3 border-t border-border flex items-center justify-end">
                   <Button
                     variant="default"
-                    size="default"
+                    size="sm"
                     id="btn-save-day-bottom"
                     onClick={handleSaveDay}
-                    className="gap-2 font-bold"
+                    className="gap-1.5 font-medium text-xs h-8"
                   >
-                    <Save className="w-4 h-4" />
-                    <span>Save {entries.length} Entries to {selectedDate}</span>
+                    <Save className="w-3.5 h-3.5" />
+                    <span>Save {entries.length} Entries</span>
                   </Button>
                 </div>
               )}
@@ -619,22 +619,22 @@ Branch - feature/aria-5854`}
 
       {/* Non-working Day Confirmation Card */}
       {dayType !== DayType.WORKING && (
-        <Card className="border-border text-center">
-          <CardContent className="p-6 sm:p-8">
-            <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mx-auto mb-3 text-muted-foreground">
-              <Clock className="w-6 h-6" />
+        <Card className="border-border shadow-xs text-center">
+          <CardContent className="p-6">
+            <div className="w-10 h-10 rounded-full bg-muted/60 flex items-center justify-center mx-auto mb-2 text-muted-foreground">
+              <Clock className="w-5 h-5" />
             </div>
-            <h3 className="font-bold text-foreground text-base mb-1">
+            <h3 className="font-semibold text-foreground text-sm mb-1">
               Marked as {dayType.replace('_', ' ')}
             </h3>
-            <p className="text-xs text-muted-foreground max-w-md mx-auto mb-4">
-              This date is classified as non-working. In the generated Excel timesheet, columns B:H will automatically merge with a centered "{dayType.replace('_', ' ')}" label.
+            <p className="text-xs text-muted-foreground max-w-sm mx-auto mb-3">
+              This date is classified as non-working. Timesheet columns will display a centered "{dayType.replace('_', ' ')}" indicator.
             </p>
             <Button
               variant="default"
               size="sm"
               onClick={handleSaveDay}
-              className="font-semibold"
+              className="font-medium text-xs h-8"
             >
               Save Day Status
             </Button>

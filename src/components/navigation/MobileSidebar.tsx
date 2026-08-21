@@ -75,45 +75,45 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = ({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="left" onClose={() => onOpenChange(false)} className="w-[300px] flex flex-col justify-between">
         <div>
-          <SheetHeader className="text-left">
+          <SheetHeader className="text-left pb-4 border-b border-border">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-600">
+              <div className="w-8 h-8 rounded-lg bg-primary text-primary-foreground flex items-center justify-center font-bold text-sm tracking-tight shadow-xs">
                 <FileSpreadsheet className="w-4 h-4" />
               </div>
               <div>
-                <SheetTitle className="text-base font-extrabold">WorkLog</SheetTitle>
-                <SheetDescription className="text-[11px]">
-                  Local-First Timesheet Manager
+                <SheetTitle className="text-sm font-bold tracking-tight">WorkLog</SheetTitle>
+                <SheetDescription className="text-[11px] text-muted-foreground">
+                  Timesheet & Logs
                 </SheetDescription>
               </div>
             </div>
           </SheetHeader>
 
           {/* User Account / Auth Section */}
-          <div className="p-3 mb-3 rounded-xl bg-card border border-border">
+          <div className="p-3 my-3 rounded-lg bg-muted/30 border border-border">
             {isAuthenticated ? (
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 min-w-0">
-                    <div className="w-7 h-7 rounded-full bg-amber-600 text-white font-bold text-xs flex items-center justify-center shrink-0">
+                    <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground font-bold text-[10px] flex items-center justify-center shrink-0">
                       {(user?.email || 'U').charAt(0).toUpperCase()}
                     </div>
                     <div className="min-w-0">
-                      <p className="text-xs font-bold text-foreground truncate">
+                      <p className="text-xs font-semibold text-foreground truncate">
                         {user?.user_metadata?.full_name || user?.email?.split('@')[0]}
                       </p>
                       <p className="text-[10px] text-muted-foreground truncate">{user?.email}</p>
                     </div>
                   </div>
                   <Badge variant="outline" className="text-[9px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 py-0 px-1">
-                    Continuous Sync
+                    Sync
                   </Badge>
                 </div>
 
                 <div className="flex items-center justify-between pt-1 text-[11px] text-muted-foreground">
                   <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-medium">
-                    <Cloud className="w-3.5 h-3.5" />
-                    Supabase Connected
+                    <Cloud className="w-3 h-3" />
+                    Connected
                   </span>
                   <Button
                     variant="ghost"
@@ -122,7 +122,7 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = ({
                       signOut();
                       onOpenChange(false);
                     }}
-                    className="h-6 text-[11px] text-rose-600 hover:text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-950/40 px-2"
+                    className="h-6 text-[11px] text-rose-600 hover:text-rose-700 px-1.5"
                   >
                     <LogOut className="w-3 h-3 mr-1" />
                     <span>Sign Out</span>
@@ -132,19 +132,19 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = ({
             ) : (
               <div className="flex items-center justify-between gap-2">
                 <div>
-                  <p className="text-xs font-bold text-foreground">Local Guest Mode</p>
-                  <p className="text-[10px] text-muted-foreground">Data stored in browser</p>
+                  <p className="text-xs font-semibold text-foreground">Local Mode</p>
+                  <p className="text-[10px] text-muted-foreground">Browser storage</p>
                 </div>
                 <Button
                   size="sm"
-                  variant="amber"
+                  variant="outline"
                   onClick={() => {
                     onOpenChange(false);
                     openAuthModal(isConfigured ? 'signin' : 'config');
                   }}
-                  className="h-8 text-xs font-bold gap-1"
+                  className="h-7 text-xs font-medium gap-1 rounded-md"
                 >
-                  <LogIn className="w-3.5 h-3.5" />
+                  <LogIn className="w-3 h-3" />
                   <span>Sign In</span>
                 </Button>
               </div>
@@ -152,14 +152,14 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = ({
           </div>
 
           {/* Month Stats Card */}
-          <div className="p-3 mb-4 rounded-xl bg-muted/60 border border-border">
-            <div className="flex items-center justify-between text-xs font-semibold mb-1">
-              <span className="text-muted-foreground">{monthlyStats.monthName} {monthlyStats.year}</span>
-              <span className="font-mono font-bold text-foreground">{monthlyStats.totalHoursFormatted}</span>
+          <div className="p-3 mb-3 rounded-lg bg-muted/20 border border-border">
+            <div className="flex items-center justify-between text-xs mb-1">
+              <span className="text-muted-foreground font-medium">{monthlyStats.monthName} {monthlyStats.year}</span>
+              <span className="font-mono font-semibold text-foreground text-[11px]">{monthlyStats.totalHoursFormatted}</span>
             </div>
-            <div className="w-full bg-background rounded-full h-1.5 overflow-hidden">
+            <div className="w-full bg-muted rounded-full h-1.5 overflow-hidden">
               <div
-                className="bg-emerald-500 h-full rounded-full transition-all duration-300"
+                className="bg-primary h-full rounded-full transition-all duration-300"
                 style={{
                   width: `${Math.min(
                     100,
@@ -170,9 +170,9 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = ({
                 }}
               />
             </div>
-            <div className="flex items-center justify-between text-[10px] text-muted-foreground mt-1">
-              <span>{monthlyStats.loggedWorkingDays} / {monthlyStats.expectedWorkingDays} days logged</span>
-              <span>{monthlyStats.completionRate}%</span>
+            <div className="flex items-center justify-between text-[10px] text-muted-foreground mt-1 font-medium">
+              <span>{monthlyStats.loggedWorkingDays}/{monthlyStats.expectedWorkingDays} days</span>
+              <span className="font-mono text-foreground font-medium">{monthlyStats.completionRate}%</span>
             </div>
           </div>
 
@@ -184,10 +184,10 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = ({
                 <button
                   key={item.id}
                   onClick={() => handleNav(item.id, item.to)}
-                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer ${
+                  className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
                     isActive
-                      ? 'bg-primary text-primary-foreground shadow-2xs'
-                      : 'text-foreground hover:bg-muted'
+                      ? 'bg-primary text-primary-foreground shadow-xs'
+                      : 'text-foreground hover:bg-muted/60'
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
@@ -195,7 +195,7 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = ({
                     <span>{item.label}</span>
                   </div>
                   {item.badge && (
-                    <Badge variant="amber" className="text-[10px] px-1.5 py-0">
+                    <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
                       {item.badge}
                     </Badge>
                   )}
@@ -205,88 +205,90 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = ({
           </div>
 
           {/* Quick Exports Section */}
-          <div className="mt-5 pt-4 border-t border-border space-y-2">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground px-2">
-              Exports & Actions
+          <div className="mt-4 pt-3 border-t border-border space-y-1.5">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70 px-1">
+              Exports
             </p>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                exportExcel();
-                onOpenChange(false);
-              }}
-              className="w-full justify-start text-xs font-semibold"
-            >
-              <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600 mr-2" />
-              <span>Export Excel (.xlsx)</span>
-            </Button>
+            <div className="grid grid-cols-2 gap-1.5">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  exportExcel();
+                  onOpenChange(false);
+                }}
+                className="h-8 justify-center text-xs font-medium rounded-md gap-1.5"
+              >
+                <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                <span>Excel</span>
+              </Button>
 
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                exportCsv();
-                onOpenChange(false);
-              }}
-              className="w-full justify-start text-xs font-semibold"
-            >
-              <FileText className="w-3.5 h-3.5 text-blue-600 mr-2" />
-              <span>Export CSV (.csv)</span>
-            </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  exportCsv();
+                  onOpenChange(false);
+                }}
+                className="h-8 justify-center text-xs font-medium rounded-md gap-1.5"
+              >
+                <FileText className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                <span>CSV</span>
+              </Button>
+            </div>
 
             {warningCount > 0 && (
               <Button
-                variant="destructive"
+                variant="outline"
                 size="sm"
                 onClick={() => {
                   onOpenWarningsModal();
                   onOpenChange(false);
                 }}
-                className="w-full justify-start text-xs font-semibold bg-amber-500 hover:bg-amber-600 text-white"
+                className="w-full justify-start text-xs font-medium border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-300"
               >
                 <AlertTriangle className="w-3.5 h-3.5 mr-2" />
-                <span>View {warningCount} Warnings</span>
+                <span>{warningCount} {warningCount === 1 ? 'Warning' : 'Warnings'}</span>
               </Button>
             )}
           </div>
         </div>
 
         {/* Theme Selector in Footer */}
-        <div className="pt-4 border-t border-border">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground px-2 mb-2">
+        <div className="pt-3 border-t border-border">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70 px-1 mb-1.5">
             Appearance
           </p>
-          <div className="grid grid-cols-3 gap-1 bg-muted p-1 rounded-xl">
+          <div className="grid grid-cols-3 gap-1 bg-muted/60 p-0.5 rounded-lg border border-border">
             <button
               onClick={() => setTheme('light')}
-              className={`flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+              className={`flex items-center justify-center gap-1.5 py-1 rounded-md text-xs font-medium transition-colors ${
                 theme === 'light'
-                  ? 'bg-card text-foreground shadow-2xs'
+                  ? 'bg-card text-foreground shadow-2xs font-semibold'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
-              <Sun className="w-3.5 h-3.5 text-amber-500" />
+              <Sun className="w-3.5 h-3.5" />
               <span>Light</span>
             </button>
 
             <button
               onClick={() => setTheme('dark')}
-              className={`flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+              className={`flex items-center justify-center gap-1.5 py-1 rounded-md text-xs font-medium transition-colors ${
                 theme === 'dark'
-                  ? 'bg-card text-foreground shadow-2xs'
+                  ? 'bg-card text-foreground shadow-2xs font-semibold'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
-              <Moon className="w-3.5 h-3.5 text-amber-400" />
+              <Moon className="w-3.5 h-3.5" />
               <span>Dark</span>
             </button>
 
             <button
               onClick={() => setTheme('system')}
-              className={`flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+              className={`flex items-center justify-center gap-1.5 py-1 rounded-md text-xs font-medium transition-colors ${
                 theme === 'system'
-                  ? 'bg-card text-foreground shadow-2xs'
+                  ? 'bg-card text-foreground shadow-2xs font-semibold'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >

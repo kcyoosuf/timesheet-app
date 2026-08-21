@@ -52,6 +52,7 @@ interface WorkLogContextType {
   // Actions
   setSelectedDate: (date: string) => void;
   setCurrentMonthYear: (year: number, month: number) => void;
+  setMonthAndYear: (month: number, year: number) => void;
   goToPreviousMonth: () => void;
   goToNextMonth: () => void;
   goToToday: () => void;
@@ -457,30 +458,62 @@ export const WorkLogProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const setCurrentMonthYear = useCallback((year: number, month: number) => {
     setCurrentYear(year);
     setCurrentMonth(month);
+    setSelectedDateState((prev) => {
+      const parsed = parseDateIso(prev);
+      const maxDays = getDaysInMonth(year, month);
+      const targetDay = Math.min(parsed.day, maxDays);
+      return formatDateIso(year, month, targetDay);
+    });
   }, []);
 
+  const setMonthAndYear = useCallback(
+    (month: number, year: number) => {
+      setCurrentMonthYear(year, month);
+    },
+    [setCurrentMonthYear]
+  );
+
   const goToPreviousMonth = useCallback(() => {
-    if (currentMonth === 0) {
-      setCurrentYear((y) => y - 1);
-      setCurrentMonth(11);
-    } else {
-      setCurrentMonth((m) => m - 1);
+    let newYear = currentYear;
+    let newMonth = currentMonth - 1;
+    if (newMonth < 0) {
+      newMonth = 11;
+      newYear = currentYear - 1;
     }
-  }, [currentMonth]);
+    setCurrentYear(newYear);
+    setCurrentMonth(newMonth);
+    setSelectedDateState((prev) => {
+      const parsed = parseDateIso(prev);
+      const maxDays = getDaysInMonth(newYear, newMonth);
+      const targetDay = Math.min(parsed.day, maxDays);
+      return formatDateIso(newYear, newMonth, targetDay);
+    });
+  }, [currentYear, currentMonth]);
 
   const goToNextMonth = useCallback(() => {
-    if (currentMonth === 11) {
-      setCurrentYear((y) => y + 1);
-      setCurrentMonth(0);
-    } else {
-      setCurrentMonth((m) => m + 1);
+    let newYear = currentYear;
+    let newMonth = currentMonth + 1;
+    if (newMonth > 11) {
+      newMonth = 0;
+      newYear = currentYear + 1;
     }
-  }, [currentMonth]);
+    setCurrentYear(newYear);
+    setCurrentMonth(newMonth);
+    setSelectedDateState((prev) => {
+      const parsed = parseDateIso(prev);
+      const maxDays = getDaysInMonth(newYear, newMonth);
+      const targetDay = Math.min(parsed.day, maxDays);
+      return formatDateIso(newYear, newMonth, targetDay);
+    });
+  }, [currentYear, currentMonth]);
 
   const goToToday = useCallback(() => {
     const today = getTodayIso();
-    setSelectedDate(today);
-  }, [setSelectedDate]);
+    const parsed = parseDateIso(today);
+    setCurrentYear(parsed.year);
+    setCurrentMonth(parsed.month);
+    setSelectedDateState(today);
+  }, []);
 
   // ================= ON-THE-GO MUTATIONS (IndexedDB + Supabase) =================
 
@@ -916,6 +949,7 @@ export const WorkLogProvider: React.FC<{ children: React.ReactNode }> = ({ child
         isOnline,
         setSelectedDate,
         setCurrentMonthYear,
+        setMonthAndYear,
         goToPreviousMonth,
         goToNextMonth,
         goToToday,

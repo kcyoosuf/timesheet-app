@@ -48,7 +48,10 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({ onSelectDayForEntr
     holidaysMap,
     updateDayType,
     settings,
-    setMonthAndYear,
+    goToPreviousMonth,
+    goToNextMonth,
+    goToToday,
+    setCurrentMonthYear,
   } = useWorkLog();
 
   const [calendarViewMode, setCalendarViewMode] = useState<'grid' | 'week' | 'list'>('grid');
@@ -94,13 +97,8 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({ onSelectDayForEntr
       const prevWeekDate = new Date(parsed.year, parsed.month, parsed.day - 7);
       const newIso = formatDateIso(prevWeekDate.getFullYear(), prevWeekDate.getMonth(), prevWeekDate.getDate());
       setSelectedDate(newIso);
-      setMonthAndYear(prevWeekDate.getMonth(), prevWeekDate.getFullYear());
     } else {
-      if (currentMonth === 0) {
-        setMonthAndYear(11, currentYear - 1);
-      } else {
-        setMonthAndYear(currentMonth - 1, currentYear);
-      }
+      goToPreviousMonth();
     }
   };
 
@@ -110,20 +108,13 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({ onSelectDayForEntr
       const nextWeekDate = new Date(parsed.year, parsed.month, parsed.day + 7);
       const newIso = formatDateIso(nextWeekDate.getFullYear(), nextWeekDate.getMonth(), nextWeekDate.getDate());
       setSelectedDate(newIso);
-      setMonthAndYear(nextWeekDate.getMonth(), nextWeekDate.getFullYear());
     } else {
-      if (currentMonth === 11) {
-        setMonthAndYear(0, currentYear + 1);
-      } else {
-        setMonthAndYear(currentMonth + 1, currentYear);
-      }
+      goToNextMonth();
     }
   };
 
   const handleJumpToToday = () => {
-    const today = new Date();
-    setMonthAndYear(today.getMonth(), today.getFullYear());
-    setSelectedDate(todayIso);
+    goToToday();
   };
 
   const getDayStatusMeta = (record: DayRecord | undefined, dateIso: string) => {
@@ -146,9 +137,9 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({ onSelectDayForEntr
           return {
             label: 'Working',
             bg: isSelected
-              ? 'bg-emerald-50 dark:bg-emerald-950/60 border-emerald-500 ring-2 ring-emerald-500/40 shadow-xs'
-              : 'bg-card hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 border-emerald-200 dark:border-emerald-900/60 text-card-foreground',
-            badgeBg: 'bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
+              ? 'bg-card border-primary ring-1 ring-primary shadow-xs'
+              : 'bg-card hover:bg-muted/40 border-border/80 text-card-foreground',
+            badgeBg: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/20',
             dotColor: 'bg-emerald-500',
             icon: <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />,
             hours: formatMinutesForBadge(record.hoursMinutes),
@@ -159,9 +150,9 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({ onSelectDayForEntr
           return {
             label: 'Missing Entry',
             bg: isSelected
-              ? 'bg-amber-50 dark:bg-amber-950/60 border-amber-500 ring-2 ring-amber-500/40 shadow-xs'
-              : 'bg-amber-50/50 dark:bg-amber-950/25 hover:bg-amber-50/80 dark:hover:bg-amber-950/45 border-amber-300/80 dark:border-amber-900/60 text-card-foreground',
-            badgeBg: 'bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-300 border-amber-200 dark:border-amber-800',
+              ? 'bg-amber-500/10 border-amber-500 ring-1 ring-amber-500 shadow-xs'
+              : 'bg-amber-500/5 hover:bg-amber-500/10 border-amber-500/30 text-card-foreground',
+            badgeBg: 'bg-amber-500/10 text-amber-800 dark:text-amber-300 border-amber-500/20',
             dotColor: 'bg-amber-500',
             icon: <AlertCircle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />,
             hours: formatMinutesForBadge(record.hoursMinutes),
@@ -173,20 +164,20 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({ onSelectDayForEntr
         return {
           label: 'Weekend',
           bg: isSelected
-            ? 'bg-muted border-slate-400 dark:border-slate-500 ring-2 ring-slate-400/30'
-            : 'bg-muted/30 hover:bg-muted/60 border-border text-muted-foreground',
+            ? 'bg-muted/70 border-foreground/30 ring-1 ring-foreground/20'
+            : 'bg-muted/25 hover:bg-muted/50 border-border/60 text-muted-foreground',
           badgeBg: 'bg-muted text-muted-foreground border-border',
-          dotColor: 'bg-slate-400 dark:bg-slate-600',
-          icon: <Coffee className="w-3.5 h-3.5 text-muted-foreground/70 shrink-0" />,
+          dotColor: 'bg-muted-foreground/50',
+          icon: <Coffee className="w-3.5 h-3.5 text-muted-foreground/60 shrink-0" />,
           isWeekend: true,
         };
       case DayType.PERSONAL_LEAVE:
         return {
           label: 'Personal Leave',
           bg: isSelected
-            ? 'bg-indigo-50 dark:bg-indigo-950/60 border-indigo-500 ring-2 ring-indigo-500/40 shadow-xs'
-            : 'bg-indigo-50/40 dark:bg-indigo-950/25 hover:bg-indigo-50/70 border-indigo-200 dark:border-indigo-900 text-card-foreground',
-          badgeBg: 'bg-indigo-100 dark:bg-indigo-950 text-indigo-800 dark:text-indigo-300 border-indigo-200',
+            ? 'bg-indigo-500/10 border-indigo-500 ring-1 ring-indigo-500 shadow-xs'
+            : 'bg-indigo-500/5 hover:bg-indigo-500/10 border-indigo-500/20 text-card-foreground',
+          badgeBg: 'bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border-indigo-500/20',
           dotColor: 'bg-indigo-500',
           icon: <Umbrella className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 shrink-0" />,
         };
@@ -194,9 +185,9 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({ onSelectDayForEntr
         return {
           label: 'Sick Leave',
           bg: isSelected
-            ? 'bg-rose-50 dark:bg-rose-950/60 border-rose-500 ring-2 ring-rose-500/40 shadow-xs'
-            : 'bg-rose-50/40 dark:bg-rose-950/25 hover:bg-rose-50/70 border-rose-200 dark:border-rose-900 text-card-foreground',
-          badgeBg: 'bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300 border-rose-200',
+            ? 'bg-rose-500/10 border-rose-500 ring-1 ring-rose-500 shadow-xs'
+            : 'bg-rose-500/5 hover:bg-rose-500/10 border-rose-500/20 text-card-foreground',
+          badgeBg: 'bg-rose-500/10 text-rose-700 dark:text-rose-300 border-rose-500/20',
           dotColor: 'bg-rose-500',
           icon: <Umbrella className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400 shrink-0" />,
         };
@@ -204,9 +195,9 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({ onSelectDayForEntr
         return {
           label: holiday ? holiday.name : 'Company Holiday',
           bg: isSelected
-            ? 'bg-purple-50 dark:bg-purple-950/60 border-purple-500 ring-2 ring-purple-500/40 shadow-xs'
-            : 'bg-purple-50/40 dark:bg-purple-950/25 hover:bg-purple-50/70 border-purple-200 dark:border-purple-900 text-card-foreground',
-          badgeBg: 'bg-purple-100 dark:bg-purple-950 text-purple-800 dark:text-purple-300 border-purple-200',
+            ? 'bg-purple-500/10 border-purple-500 ring-1 ring-purple-500 shadow-xs'
+            : 'bg-purple-500/5 hover:bg-purple-500/10 border-purple-500/20 text-card-foreground',
+          badgeBg: 'bg-purple-500/10 text-purple-700 dark:text-purple-300 border-purple-500/20',
           dotColor: 'bg-purple-500',
           icon: <Flag className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400 shrink-0" />,
           holidayName: holiday?.name,
@@ -215,9 +206,9 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({ onSelectDayForEntr
         return {
           label: record.notes || 'Other Leave',
           bg: isSelected
-            ? 'bg-orange-50 dark:bg-orange-950/60 border-orange-500 ring-2 ring-orange-500/40 shadow-xs'
-            : 'bg-orange-50/40 dark:bg-orange-950/25 hover:bg-orange-50/70 border-orange-200 dark:border-orange-900 text-card-foreground',
-          badgeBg: 'bg-orange-100 dark:bg-orange-950 text-orange-800 dark:text-orange-300 border-orange-200',
+            ? 'bg-orange-500/10 border-orange-500 ring-1 ring-orange-500 shadow-xs'
+            : 'bg-orange-500/5 hover:bg-orange-500/10 border-orange-500/20 text-card-foreground',
+          badgeBg: 'bg-orange-500/10 text-orange-700 dark:text-orange-300 border-orange-500/20',
           dotColor: 'bg-orange-500',
           icon: <Umbrella className="w-3.5 h-3.5 text-orange-600 dark:text-orange-400 shrink-0" />,
         };
@@ -226,7 +217,7 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({ onSelectDayForEntr
 
   return (
     <div className="space-y-4">
-      <Card className="border-border">
+      <Card className="border-border shadow-xs">
         {/* Calendar Header with Navigation Controls */}
         <CardHeader className="p-3.5 sm:p-5 border-b border-border space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2.5">
@@ -235,15 +226,17 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({ onSelectDayForEntr
               <Button
                 variant="outline"
                 size="iconSm"
+                id="btn-calendar-prev-month"
                 onClick={handlePrevMonth}
                 title={calendarViewMode === 'week' ? 'Previous Week' : 'Previous Month'}
-                className="h-8 w-8 rounded-xl shrink-0"
+                aria-label={calendarViewMode === 'week' ? 'Previous Week' : 'Previous Month'}
+                className="h-7 w-7 rounded-md shrink-0 cursor-pointer"
               >
                 <ChevronLeft className="w-4 h-4" />
               </Button>
 
               <div className="flex items-center gap-1.5">
-                <span className="font-extrabold text-foreground text-base sm:text-xl tracking-tight">
+                <span className="font-bold text-foreground text-base sm:text-lg tracking-tight">
                   {new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long' })}{' '}
                   {currentYear}
                 </span>
@@ -251,8 +244,9 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({ onSelectDayForEntr
                 <Button
                   variant="ghost"
                   size="sm"
+                  id="btn-calendar-today"
                   onClick={handleJumpToToday}
-                  className="text-[11px] h-7 px-2 font-bold text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/50 rounded-lg shrink-0"
+                  className="text-[11px] h-6 px-1.5 font-semibold text-primary hover:bg-primary/10 rounded-md shrink-0 cursor-pointer"
                 >
                   Today
                 </Button>
@@ -261,22 +255,24 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({ onSelectDayForEntr
               <Button
                 variant="outline"
                 size="iconSm"
+                id="btn-calendar-next-month"
                 onClick={handleNextMonth}
                 title={calendarViewMode === 'week' ? 'Next Week' : 'Next Month'}
-                className="h-8 w-8 rounded-xl shrink-0"
+                aria-label={calendarViewMode === 'week' ? 'Next Week' : 'Next Month'}
+                className="h-7 w-7 rounded-md shrink-0 cursor-pointer"
               >
                 <ChevronRight className="w-4 h-4" />
               </Button>
             </div>
 
             {/* View Mode Toggle: Month Grid / Week View / Agenda */}
-            <div className="flex items-center gap-1 bg-muted p-1 rounded-xl border border-border">
+            <div className="flex items-center gap-0.5 bg-muted/60 p-0.5 rounded-lg border border-border">
               <button
                 type="button"
                 onClick={() => setCalendarViewMode('grid')}
-                className={`flex items-center gap-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
                   calendarViewMode === 'grid'
-                    ? 'bg-card text-foreground shadow-2xs font-bold'
+                    ? 'bg-card text-foreground shadow-2xs font-semibold'
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
@@ -287,9 +283,9 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({ onSelectDayForEntr
               <button
                 type="button"
                 onClick={() => setCalendarViewMode('week')}
-                className={`flex items-center gap-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
                   calendarViewMode === 'week'
-                    ? 'bg-card text-foreground shadow-2xs font-bold'
+                    ? 'bg-card text-foreground shadow-2xs font-semibold'
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
@@ -300,9 +296,9 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({ onSelectDayForEntr
               <button
                 type="button"
                 onClick={() => setCalendarViewMode('list')}
-                className={`flex items-center gap-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
                   calendarViewMode === 'list'
-                    ? 'bg-card text-foreground shadow-2xs font-bold'
+                    ? 'bg-card text-foreground shadow-2xs font-semibold'
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
@@ -313,25 +309,25 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({ onSelectDayForEntr
           </div>
 
           {/* Status Indicators Legend */}
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] sm:text-xs text-muted-foreground pt-1 border-t border-border/40">
-            <span className="font-semibold text-foreground mr-0.5">Legend:</span>
-            <span className="inline-flex items-center gap-1">
+          <div className="flex flex-wrap items-center gap-x-3.5 gap-y-1.5 text-[11px] text-muted-foreground pt-2 border-t border-border/50">
+            <span className="font-medium text-foreground">Status:</span>
+            <span className="inline-flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
               <span>Logged</span>
             </span>
-            <span className="inline-flex items-center gap-1">
+            <span className="inline-flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0" />
               <span>Missing Update</span>
             </span>
-            <span className="inline-flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-slate-400 dark:bg-slate-600 shrink-0" />
+            <span className="inline-flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-muted-foreground/50 shrink-0" />
               <span>Weekend</span>
             </span>
-            <span className="inline-flex items-center gap-1">
+            <span className="inline-flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-indigo-500 shrink-0" />
               <span>Leave</span>
             </span>
-            <span className="inline-flex items-center gap-1">
+            <span className="inline-flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-purple-500 shrink-0" />
               <span>Holiday</span>
             </span>
@@ -798,13 +794,13 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({ onSelectDayForEntr
 
             {/* Primary Log / Edit Action Button */}
             <Button
-              variant="amber"
-              size="default"
+              variant="default"
+              size="sm"
               id="btn-inspect-log-work"
               onClick={() => onSelectDayForEntry(selectedDate)}
-              className="gap-2 font-bold shrink-0 self-stretch sm:self-auto"
+              className="gap-2 font-medium shrink-0 self-stretch sm:self-auto h-8 text-xs"
             >
-              <Edit3 className="w-4 h-4" />
+              <Edit3 className="w-3.5 h-3.5" />
               <span>
                 {selectedRecord?.type === DayType.WORKING && (!selectedRecord.entries || selectedRecord.entries.length === 0)
                   ? 'Log Work for this Day'
@@ -817,7 +813,7 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({ onSelectDayForEntr
         <CardContent className="p-3.5 sm:p-5 space-y-4">
           {/* Quick 1-Tap Day Classification Switcher */}
           <div>
-            <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider block mb-2">
+            <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-2">
               Quick Day Classification
             </span>
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
@@ -826,7 +822,7 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({ onSelectDayForEntr
                 variant={selectedRecord?.type === DayType.WORKING ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => updateDayType(selectedDate, DayType.WORKING, settings.defaultWorkingHoursMinutes)}
-                className="justify-start sm:justify-center text-xs h-8 gap-1.5 font-semibold"
+                className="justify-start sm:justify-center text-xs h-8 gap-1.5 font-medium rounded-md"
               >
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                 <span>Working</span>
@@ -837,9 +833,9 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({ onSelectDayForEntr
                 variant={selectedRecord?.type === DayType.WEEKEND ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => updateDayType(selectedDate, DayType.WEEKEND, 0)}
-                className="justify-start sm:justify-center text-xs h-8 gap-1.5 font-semibold"
+                className="justify-start sm:justify-center text-xs h-8 gap-1.5 font-medium rounded-md"
               >
-                <Coffee className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                <Coffee className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
                 <span>Weekend</span>
               </Button>
 
@@ -848,7 +844,7 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({ onSelectDayForEntr
                 variant={selectedRecord?.type === DayType.PERSONAL_LEAVE ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => updateDayType(selectedDate, DayType.PERSONAL_LEAVE, 0)}
-                className="justify-start sm:justify-center text-xs h-8 gap-1.5 font-semibold"
+                className="justify-start sm:justify-center text-xs h-8 gap-1.5 font-medium rounded-md"
               >
                 <Umbrella className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
                 <span>Personal Leave</span>
@@ -859,7 +855,7 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({ onSelectDayForEntr
                 variant={selectedRecord?.type === DayType.SICK_LEAVE ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => updateDayType(selectedDate, DayType.SICK_LEAVE, 0)}
-                className="justify-start sm:justify-center text-xs h-8 gap-1.5 font-semibold"
+                className="justify-start sm:justify-center text-xs h-8 gap-1.5 font-medium rounded-md"
               >
                 <Umbrella className="w-3.5 h-3.5 text-rose-500 shrink-0" />
                 <span>Sick Leave</span>
@@ -870,7 +866,7 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({ onSelectDayForEntr
                 variant={selectedRecord?.type === DayType.COMPANY_HOLIDAY ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => updateDayType(selectedDate, DayType.COMPANY_HOLIDAY, 0)}
-                className="col-span-2 sm:col-span-1 justify-start sm:justify-center text-xs h-8 gap-1.5 font-semibold"
+                className="col-span-2 sm:col-span-1 justify-start sm:justify-center text-xs h-8 gap-1.5 font-medium rounded-md"
               >
                 <Flag className="w-3.5 h-3.5 text-purple-500 shrink-0" />
                 <span>Holiday</span>
@@ -880,8 +876,8 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({ onSelectDayForEntr
 
           {/* Logged Tasks preview for Selected Day */}
           {selectedRecord?.type === DayType.WORKING && (
-            <div className="pt-2 border-t border-border">
-              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider block mb-2">
+            <div className="pt-3 border-t border-border">
+              <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-2">
                 Work Updates on {formatShortDate(selectedDate)} ({selectedRecord.entries?.length || 0})
               </span>
 
@@ -890,24 +886,24 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({ onSelectDayForEntr
                   {selectedRecord.entries.map((entry, idx) => (
                     <div
                       key={entry.id || idx}
-                      className="p-3 bg-muted/40 rounded-xl border border-border text-xs space-y-1.5"
+                      className="p-3 bg-muted/30 rounded-lg border border-border text-xs space-y-1.5"
                     >
                       <div className="flex items-center justify-between gap-2 flex-wrap">
-                        <div className="flex items-center gap-1.5 font-mono font-bold text-foreground">
+                        <div className="flex items-center gap-1.5 font-mono font-medium text-foreground">
                           <Tag className="w-3.5 h-3.5 text-muted-foreground" />
                           <span>{(entry.tickets || []).join(', ') || 'General Work'}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Badge variant="outline" className="text-[10px]">
+                          <Badge variant="outline" className="text-[10px] py-0 px-1.5">
                             {entry.client} / {entry.project}
                           </Badge>
-                          <span className="font-mono font-bold text-foreground">
+                          <span className="font-mono font-semibold text-foreground">
                             {formatMinutesForBadge(entry.hoursMinutes)}
                           </span>
                         </div>
                       </div>
 
-                      <p className="text-foreground leading-relaxed font-normal">
+                      <p className="text-foreground leading-relaxed font-normal text-xs">
                         {entry.description || <span className="text-muted-foreground italic">No description</span>}
                       </p>
 
@@ -916,7 +912,7 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({ onSelectDayForEntr
                           href={entry.prUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center gap-1 text-[11px] font-mono text-purple-600 dark:text-purple-400 hover:underline pt-0.5"
+                          className="inline-flex items-center gap-1 text-[11px] font-mono text-primary hover:underline pt-0.5"
                         >
                           <span>{entry.prNumber ? `PR #${entry.prNumber}` : 'PR Link'}</span>
                           <ExternalLink className="w-3 h-3" />
@@ -926,16 +922,16 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({ onSelectDayForEntr
                   ))}
                 </div>
               ) : (
-                <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between gap-3">
+                <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2 text-amber-900 dark:text-amber-200 text-xs">
                     <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
                     <span>No work entries logged yet for this working day.</span>
                   </div>
                   <Button
                     size="sm"
-                    variant="amber"
+                    variant="outline"
                     onClick={() => onSelectDayForEntry(selectedDate)}
-                    className="text-xs font-bold h-7 shrink-0"
+                    className="text-xs font-semibold h-7 shrink-0 border-amber-500/30 text-amber-900 dark:text-amber-200 hover:bg-amber-500/20"
                   >
                     Log Entry
                   </Button>

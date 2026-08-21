@@ -79,9 +79,9 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <>
-      <header className="bg-card border-b border-border sticky top-0 z-20 shadow-2xs transition-colors">
+      <header className="bg-card/80 backdrop-blur-md border-b border-border sticky top-0 z-20 transition-colors">
         <div className="w-full px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-14 sm:h-16 gap-3">
+          <div className="flex items-center justify-between h-14 gap-3">
             {/* Left: Mobile Menu Button & Brand (mobile only) / Page Title (desktop) */}
             <div className="flex items-center gap-3">
               <Button
@@ -91,44 +91,44 @@ export const Navbar: React.FC<NavbarProps> = ({
                 className="md:hidden text-foreground hover:bg-muted"
                 aria-label="Open Mobile Menu"
               >
-                <Menu className="w-5 h-5" />
+                <Menu className="w-4 h-4" />
               </Button>
 
               {/* Mobile-only logo */}
               <Link to="/" className="flex md:hidden items-center gap-2 group">
-                <div className="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/25 flex items-center justify-center text-amber-600 shrink-0">
-                  <FileSpreadsheet className="w-4 h-4" />
+                <div className="w-7 h-7 rounded-md bg-primary text-primary-foreground flex items-center justify-center font-bold text-xs shrink-0">
+                  <FileSpreadsheet className="w-3.5 h-3.5" />
                 </div>
-                <span className="font-extrabold text-foreground tracking-tight text-base">
+                <span className="font-bold text-foreground tracking-tight text-sm">
                   WorkLog
                 </span>
               </Link>
 
               {/* Desktop active page title */}
               <div className="hidden md:flex items-center gap-2.5">
-                <h1 className="text-base lg:text-lg font-bold text-foreground tracking-tight">
+                <h1 className="text-sm lg:text-base font-semibold text-foreground tracking-tight">
                   {getPageTitle()}
                 </h1>
-                <Badge variant="outline" className="text-[11px] font-semibold text-muted-foreground">
+                <Badge variant="outline" className="text-[11px] font-medium text-muted-foreground px-2 py-0.5">
                   {monthlyStats.monthName} {monthlyStats.year}
                 </Badge>
               </div>
             </div>
 
             {/* Right: Actions, Profile & Export */}
-            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-              {/* Warnings indicator button - hidden on mobile, visible on tablet/desktop */}
+            <div className="flex items-center gap-2 shrink-0">
+              {/* Warnings indicator button */}
               {warningCount > 0 && (
                 <Button
-                  variant="destructive"
+                  variant="outline"
                   size="sm"
                   id="btn-header-warnings"
                   onClick={onOpenWarningsModal}
                   title={`${warningCount} warnings found`}
-                  className="hidden sm:flex h-8 sm:h-9 px-2 sm:px-3 bg-amber-500 hover:bg-amber-600 text-white font-bold gap-1 text-xs"
+                  className="hidden sm:flex h-8 px-2.5 border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-300 font-medium gap-1.5 text-xs rounded-md"
                 >
-                  <AlertTriangle className="w-3.5 h-3.5 text-white shrink-0" />
-                  <span>{warningCount} Warnings</span>
+                  <AlertTriangle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
+                  <span>{warningCount} {warningCount === 1 ? 'Warning' : 'Warnings'}</span>
                 </Button>
               )}
 
@@ -140,9 +140,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                   id="btn-load-sample"
                   onClick={loadSampleAugust2026Data}
                   title="Load sample August 2026 timesheet"
-                  className="hidden xl:flex items-center gap-1.5 text-amber-900 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800"
+                  className="hidden xl:flex items-center gap-1.5 h-8 text-xs border-dashed"
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                  <Sparkles className="w-3.5 h-3.5 opacity-70" />
                   <span>Sample Data</span>
                 </Button>
               )}
@@ -151,57 +151,39 @@ export const Navbar: React.FC<NavbarProps> = ({
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
-                    variant="amber"
+                    variant="outline"
                     size="sm"
                     id="btn-export-dropdown"
-                    className="h-8 sm:h-9 px-2.5 sm:px-3 gap-1 sm:gap-1.5 font-bold text-xs"
+                    className="h-8 px-2.5 gap-1.5 font-medium text-xs rounded-md"
                   >
                     <Download className="w-3.5 h-3.5" />
-                    <span className="hidden sm:inline">Export</span>
-                    <ChevronDown className="w-3.5 h-3.5 opacity-70 hidden sm:inline" />
+                    <span>Export</span>
+                    <ChevronDown className="w-3 h-3 opacity-60" />
                   </Button>
                 </DropdownMenuTrigger>
 
-                <DropdownMenuContent align="end" className="w-64 p-1.5">
+                <DropdownMenuContent align="end" className="w-56 p-1">
                   <DropdownMenuLabel className="text-[10px] text-muted-foreground uppercase tracking-wider px-2 py-1">
-                    {monthlyStats.monthName} {monthlyStats.year} Timesheet
+                    {monthlyStats.monthName} {monthlyStats.year}
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
 
                   <DropdownMenuItem
                     id="btn-dropdown-excel"
                     onClick={exportExcel}
-                    className="flex items-start gap-2.5 p-2.5 cursor-pointer"
+                    className="flex items-center gap-2 px-2 py-1.5 text-xs cursor-pointer rounded-sm"
                   >
-                    <div className="w-7 h-7 rounded-lg bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 flex items-center justify-center shrink-0 mt-0.5">
-                      <FileSpreadsheet className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <div className="text-xs font-bold text-foreground">
-                        Excel Timesheet (.xlsx)
-                      </div>
-                      <p className="text-[11px] text-muted-foreground leading-tight mt-0.5">
-                        Official format with formulas, client & job details
-                      </p>
-                    </div>
+                    <FileSpreadsheet className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                    <span className="font-medium text-foreground">Excel (.xlsx)</span>
                   </DropdownMenuItem>
 
                   <DropdownMenuItem
                     id="btn-dropdown-csv"
                     onClick={exportCsv}
-                    className="flex items-start gap-2.5 p-2.5 cursor-pointer"
+                    className="flex items-center gap-2 px-2 py-1.5 text-xs cursor-pointer rounded-sm"
                   >
-                    <div className="w-7 h-7 rounded-lg bg-blue-100 dark:bg-blue-950/80 text-blue-800 dark:text-blue-300 flex items-center justify-center shrink-0 mt-0.5">
-                      <FileText className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <div className="text-xs font-bold text-foreground">
-                        Raw CSV Data (.csv)
-                      </div>
-                      <p className="text-[11px] text-muted-foreground leading-tight mt-0.5">
-                        Standard comma-separated format for quick data parsing
-                      </p>
-                    </div>
+                    <FileText className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
+                    <span className="font-medium text-foreground">CSV (.csv)</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
